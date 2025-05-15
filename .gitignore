@@ -1,0 +1,40 @@
+# ========== Android/Java/Kotlin ==========
+*.iml
+*.apk
+*.ap_
+*.dex
+*.class
+*.log
+
+# ========== Gradle ==========
+.gradle/
+build/
+*/build/
+
+# ========== Android Studio ==========
+.idea/
+*.iws
+*.ipr
+*.bak
+*.swp
+
+# ========== Local settings ==========
+local.properties
+.env
+
+# ========== OS Files ==========
+.DS_Store
+Thumbs.db
+
+# ========== NDK / CMake ==========
+.externalNativeBuild/
+.cxx/
+
+# ========== Captures and test output ==========
+captures/
+output.json
+
+# ========== Misc ==========
+*.keystore
+*.jks
+

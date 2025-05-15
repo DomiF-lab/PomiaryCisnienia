@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "66712025887",
+    "project_id": "pomiarycisnienia-ebd8f",
+    "storage_bucket": "pomiarycisnienia-ebd8f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:66712025887:android:8a9655fd28b580a4344e2a",
+        "android_client_info": {
+          "package_name": "com.example.pomiarycisnienia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKys0KOVh2Z7KjQjS-uzEoFkZS04JElCc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
