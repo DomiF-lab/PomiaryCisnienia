@@ -1,6 +1,7 @@
 package com.example.pomiarycisnienia
 
 import android.os.Bundle
+import android.widget.ImageView
 import android.content.Intent
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,8 @@ class OknoGlowne : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     private lateinit var poleImie: TextView
+    private lateinit var ikonaProfilu: ImageView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,13 +24,11 @@ class OknoGlowne : AppCompatActivity() {
         firestore = FirebaseFirestore.getInstance()
         poleImie = findViewById(R.id.zalogowanoJako)
 
-        val przyciskWyloguj = findViewById<TextView>(R.id.przyciskWyloguj)
+        ikonaProfilu = findViewById(R.id.ikonaProfilu)
 
-        // Obsługa przycisku wylogowania
-        przyciskWyloguj.setOnClickListener {
-            auth.signOut()
-            startActivity(Intent(this, Powitanie::class.java))
-            finish()
+        // Obsługa kliknięcia w ikonę użytkownika
+        ikonaProfilu.setOnClickListener {
+            startActivity(Intent(this, OknoWyloguj::class.java))
         }
 
         val uid = auth.currentUser?.uid

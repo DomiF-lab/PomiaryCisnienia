@@ -13,6 +13,9 @@
         android:theme="@style/Theme.PomiaryCisnienia"
         tools:targetApi="31">
         <activity
+            android:name=".OknoWyloguj"
+            android:exported="false" />
+        <activity
             android:name=".LogowanieImie"
             android:exported="false" />
         <activity

@@ -8,33 +8,82 @@
     android:background="#FFFFFF"
     tools:context=".OknoGlowne">
 
-    <TextView
-        android:id="@+id/zalogowanoJako"
+    <LinearLayout
+        android:id="@+id/zalogowanoSekcja"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:orientation="horizontal"
         android:layout_marginTop="44dp"
-        android:layout_marginEnd="32dp"
-        android:text="Zalogowano jako"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/zalogowanoJako"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Zalogowano jako"
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="#1A1C29"
+            android:textSize="20sp"
+            android:paddingEnd="8dp"
+            android:gravity="center_vertical" />
+
+        <ImageView
+            android:id="@+id/ikonaProfilu"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:clickable="true"
+            android:contentDescription="Profil"
+            android:textColor="#1A1C29"
+            android:focusable="true"
+            android:src="@drawable/person" />
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/przyciskWyloguj"
+        android:id="@+id/tekstOstatniPomiar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="32dp"
-        android:clickable="true"
-        android:text="Wyloguj"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Ostatni pomiar"
+        android:textColor="#1A1C29"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/zalogowanoJako" />
+        app:layout_constraintTop_toBottomOf="@+id/zalogowanoSekcja" />
+
+    <TextView
+        android:id="@+id/dataOstatniegoPomiaru"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="07.05.2025"
+        tools:layout_editor_absoluteX="32dp"
+        tools:layout_editor_absoluteY="182dp" />
+
+    <TextView
+        android:id="@+id/tekstOstatnieSamopoczucie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Samopoczucie:"
+        tools:layout_editor_absoluteX="240dp"
+        tools:layout_editor_absoluteY="182dp" />
+
+    <TextView
+        android:id="@+id/wartoscOstatniegoCisnienia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="120/80"
+        tools:layout_editor_absoluteX="34dp"
+        tools:layout_editor_absoluteY="228dp" />
+
+    <TextView
+        android:id="@+id/wartoscOstatnieTetno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tętno: 67"
+        tools:layout_editor_absoluteX="154dp"
+        tools:layout_editor_absoluteY="235dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".OknoWyloguj">
+
+
+    <TextView
+        android:id="@+id/zalogowanoJako"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="32dp"
+        android:text="Zalogowano jako"
+        android:fontFamily="@font/roboto_bold"
+        android:textSize="20sp"
+        android:textColor="#1A1C29"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tekstCzyWylogowac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="92dp"
+        android:layout_marginEnd="32dp"
+        android:clickable="false"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Czy wylogować?"
+        android:textColor="#1A1C29"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/zalogowanoJako" />
+
+    <LinearLayout
+        android:id="@+id/przyciskiWyloguj"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="46dp"
+        app:layout_constraintTop_toBottomOf="@id/tekstCzyWylogowac"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/przyciskTak"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/button_wlasny"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:text="Tak"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/przyciskNie"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Nie"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:typeface="sans"
+            android:background="@drawable/button_wlasny"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
