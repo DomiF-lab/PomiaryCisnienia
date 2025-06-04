@@ -64,15 +64,16 @@
             android:textSize="15sp" />
 
         <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/przyciskNie"
+            android:id="@+id/przyciskNie"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
+            android:background="@drawable/button_wlasny"
+            android:backgroundTint="#942929"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
             android:text="Nie"
             android:textColor="#FFFFFF"
             android:textSize="15sp"
-            android:typeface="sans"
-            android:background="@drawable/button_wlasny"
-            android:paddingStart="32dp"
-            android:paddingEnd="32dp" />
+            android:typeface="sans" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".Pomiar">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="265dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="32dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tekstUsun"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/roboto"
+            android:gravity="center_vertical"
+            android:text="Usuń"
+            android:textColor="#E30000"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/tekstEdytuj"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/roboto"
+            android:gravity="center_vertical"
+            android:text="Edytuj"
+            android:textColor="#797979"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tekstWartosci"
+        android:layout_width="265dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Podaj wartość ciśnienia i tętna:"
+        android:textColor="#1A1C29"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+
+    <LinearLayout
+        android:id="@+id/pomiarValues"
+        android:layout_width="265dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tekstWartosci">
+
+        <!-- SYS -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.65"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tekstSYS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SYS"
+                    android:textColor="#1A1C29"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ciśnienie skurczowe"
+                    android:textColor="#797979"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="mmHg"
+                    android:textColor="#797979"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/wartoscSkurczowe"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:gravity="start"
+                android:paddingStart="12dp"
+                android:text="120"
+                android:textColor="#1A1C29"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- DIA -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.65"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tekstDIA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DIA"
+                    android:textColor="#1A1C29"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ciśnienie rozkurczowe"
+                    android:textColor="#797979"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="mmHg"
+                    android:textColor="#797979"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/wartoscRozkurczowe"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:gravity="start"
+                android:paddingStart="12dp"
+                android:text="80"
+                android:textColor="#1A1C29"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- PULS -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.65"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tekstPULS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PULS"
+                    android:textColor="#1A1C29"
+                    android:textSize="19sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Uderzenia / minutę"
+                    android:textColor="#797979"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/wartosPuls"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:gravity="start"
+                android:paddingStart="12dp"
+                android:text="67"
+                android:textColor="#1A1C29"
+                android:textSize="19sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tekstSamopoczucie"
+        android:layout_width="265dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="44dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Jakie jest Twoje samopoczucie?"
+        android:textColor="#1A1C29"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pomiarValues" />
+
+    <LinearLayout
+        android:id="@+id/przyciskiSamopoczucie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:baselineAligned="false"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tekstSamopoczucie">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/przyciskDobre"
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="16dp"
+            android:alpha="0.7"
+            android:background="@drawable/button_wlasny"
+            android:backgroundTint="#00F048"
+            android:fontFamily="@font/roboto"
+            android:text="Dobre"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/przyciskZle"
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:alpha="0.7"
+            android:background="@drawable/button_wlasny"
+            android:backgroundTint="#F00000"
+            android:fontFamily="@font/roboto"
+            android:text="Złe"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tekstDolegliwosci"
+        android:layout_width="265dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Jakie są Twoje dolegliwości?"
+        android:textColor="#1A1C29"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/przyciskiSamopoczucie" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputDolegliwosciLayout"
+        android:layout_width="265dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:hint=""
+        app:boxBackgroundColor="@android:color/transparent"
+        app:boxBackgroundMode="filled"
+        app:boxStrokeColor="#797979"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tekstDolegliwosci">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/inputDolegliwosci"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFFFFF"
+            android:clickable="true"
+            android:focusable="false"
+            android:fontFamily="@font/roboto"
+            android:inputType="none"
+            android:paddingStart="16dp"
+            android:paddingBottom="4dp"
+            android:text="Brak"
+            android:textColor="#797979"
+            android:textSize="15sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tekstDataPomiaru"
+        android:layout_width="265dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Kiedy dokonano pomiaru?"
+        android:textColor="#1A1C29"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputDolegliwosciLayout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/poleDataPomiaruLayout"
+        android:layout_width="265dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:hint=""
+        app:boxBackgroundColor="@android:color/transparent"
+        app:boxBackgroundMode="filled"
+        app:boxStrokeColor="#797979"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tekstDataPomiaru">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/poleDataPomiaru"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:clickable="true"
+            android:focusable="false"
+            android:fontFamily="@font/roboto"
+            android:inputType="none"
+            android:paddingStart="16dp"
+            android:paddingBottom="4dp"
+            android:text="08.05.2025 14:13"
+            android:textColor="#797979"
+            android:textSize="15sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/przyciskZapisz"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:backgroundTint="#0004E3"
+        android:fontFamily="@font/roboto"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="14dp"
+        android:text="Zapisz"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/poleDataPomiaruLayout" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

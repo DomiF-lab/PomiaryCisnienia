@@ -40,50 +40,6 @@
             android:src="@drawable/person" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tekstOstatniPomiar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="50dp"
-        android:fontFamily="@font/roboto_bold"
-        android:text="Ostatni pomiar"
-        android:textColor="#1A1C29"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/zalogowanoSekcja" />
-
-    <TextView
-        android:id="@+id/dataOstatniegoPomiaru"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="07.05.2025"
-        tools:layout_editor_absoluteX="32dp"
-        tools:layout_editor_absoluteY="182dp" />
-
-    <TextView
-        android:id="@+id/tekstOstatnieSamopoczucie"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Samopoczucie:"
-        tools:layout_editor_absoluteX="240dp"
-        tools:layout_editor_absoluteY="182dp" />
-
-    <TextView
-        android:id="@+id/wartoscOstatniegoCisnienia"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="120/80"
-        tools:layout_editor_absoluteX="34dp"
-        tools:layout_editor_absoluteY="228dp" />
-
-    <TextView
-        android:id="@+id/wartoscOstatnieTetno"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tętno: 67"
-        tools:layout_editor_absoluteX="154dp"
-        tools:layout_editor_absoluteY="235dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,6 +13,10 @@
         android:theme="@style/Theme.PomiaryCisnienia"
         tools:targetApi="31">
         <activity
+            android:name=".Pomiar"
+            android:exported="false"
+            android:theme="@style/Theme.PomiaryCisnienia" />
+        <activity
             android:name=".OknoWyloguj"
             android:exported="false" />
         <activity
