@@ -42,12 +42,6 @@ class OknoWyloguj : AppCompatActivity() {
                 }
         }
 
-        // Ustawienie koloru tła z przezroczystością dla przycisku "Tak"
-        przyciskTak.background.setTint(Color.parseColor("#808080"))
-
-        // Ustawienie koloru tła z przezroczystością dla przycisku "Nie"
-        przyciskNie.background.setTint(Color.parseColor("#3366EA"))
-
         // Obsługa kliknięcia w przycisk "Tak" – wylogowanie i przejście do ekranu powitalnego
         przyciskTak.setOnClickListener {
             auth.signOut()

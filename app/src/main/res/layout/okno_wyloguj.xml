@@ -52,11 +52,12 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/przyciskTak"
+            android:id="@+id/przyciskTak"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/button_wlasny"
+            android:backgroundTint="#808080"
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
             android:text="Tak"
@@ -68,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:background="@drawable/button_wlasny"
-            android:backgroundTint="#942929"
+            android:backgroundTint="#3366EA"
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
             android:text="Nie"

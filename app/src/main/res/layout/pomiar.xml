@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -107,17 +113,23 @@
                     android:textSize="15sp" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/wartoscSkurczowe"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.35"
-                android:gravity="start"
-                android:paddingStart="12dp"
-                android:text="120"
-                android:textColor="#1A1C29"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                app:boxBackgroundMode="none">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/wartoscSkurczowe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="120"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="#1A1C29"
+                    android:gravity="start" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
         <!-- DIA -->
@@ -159,17 +171,24 @@
                     android:textSize="15sp" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/wartoscRozkurczowe"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.35"
-                android:gravity="start"
-                android:paddingStart="12dp"
-                android:text="80"
-                android:textColor="#1A1C29"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                app:boxBackgroundMode="none">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/wartoscRozkurczowe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="80"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="#1A1C29"
+                    android:gravity="start" />
+            </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
 
         <!-- PULS -->
@@ -203,17 +222,23 @@
                     android:textSize="15sp" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/wartosPuls"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.35"
-                android:gravity="start"
-                android:paddingStart="12dp"
-                android:text="67"
-                android:textColor="#1A1C29"
-                android:textSize="19sp"
-                android:textStyle="bold" />
+                app:boxBackgroundMode="none">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/wartosPuls"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="67"
+                    android:textSize="19sp"
+                    android:textStyle="bold"
+                    android:textColor="#1A1C29"
+                    android:gravity="start" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -372,5 +397,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/poleDataPomiaruLayout" />
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        app:layout_constraintTop_toBottomOf="@id/przyciskZapisz"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

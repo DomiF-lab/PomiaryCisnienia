@@ -40,6 +40,61 @@
             android:src="@drawable/person" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tekstOstatniPomiar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Ostatni pomiar"
+        android:textColor="#1A1C29"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/zalogowanoSekcja" />
+
+    <TextView
+        android:id="@+id/tekstWszystkiePomiary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="36dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Wszystkie pomiary"
+        android:textColor="#1A1C29"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="409dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tekstOstatniPomiar" />
+
+    <Button
+        android:id="@+id/przyciskPrzejdz"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="#E30000"
+        android:fontFamily="@font/roboto"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="14dp"
+        android:text="Przejdź"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tekstWszystkiePomiary" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
