@@ -8,7 +8,19 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.auth.FirebaseAuth
 
+/**
+ * Ekran powitalny aplikacji.
+ *
+ * Odpowiada za:
+ * - wyświetlenie przycisku przejścia do logowania,
+ * - automatyczne przekierowanie do głównego okna aplikacji, jeśli użytkownik jest już zalogowany.
+ */
 class Powitanie : AppCompatActivity() {
+    /**
+     * Metoda wywoływana przy tworzeniu aktywności.
+     *
+     * Inicjalizuje interfejs użytkownika oraz ustawia obsługę przycisku "Rozpocznij".
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.powitanie)
@@ -19,12 +31,19 @@ class Powitanie : AppCompatActivity() {
             insets
         }
 
+        // Przycisk przekierowujący do ekranu logowania
         val przycisk = findViewById<Button>(R.id.przyciskRozpocznij)
         przycisk.setOnClickListener {
             startActivity(Intent(this, LogowanieMail::class.java))
         }
     }
 
+    /**
+     * Metoda wywoływana przy wznowieniu aktywności.
+     *
+     * Sprawdza, czy użytkownik jest już zalogowany i ewentualnie przekierowuje go
+     * bezpośrednio do głównego ekranu aplikacji.
+     */
     override fun onStart() {
         super.onStart()
 

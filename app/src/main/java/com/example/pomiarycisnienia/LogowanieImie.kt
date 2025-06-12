@@ -11,6 +11,10 @@ import androidx.core.widget.addTextChangedListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Aktywność odpowiedzialna za pobranie imienia użytkownika po rejestracji
+ * oraz zapisanie go w bazie danych Firestore.
+ */
 class LogowanieImie : AppCompatActivity() {
 
     private lateinit var poleImie: EditText
@@ -21,6 +25,11 @@ class LogowanieImie : AppCompatActivity() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var mail: String
 
+
+    /**
+     * Metoda wywoływana przy tworzeniu aktywności.
+     * Inicjalizuje komponenty UI, obsługuje walidację imienia oraz zapis do bazy danych.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.logowanie_imie)
@@ -68,17 +77,21 @@ class LogowanieImie : AppCompatActivity() {
                     "imie" to imie
                 )
 
+                // Zapis danych użytkownika do kolekcji "uzytkownicy"
                 firestore.collection("uzytkownicy").document(uid)
                     .set(uzytkownik)
                     .addOnSuccessListener {
+                        // Przekierowanie do głównego okna aplikacji po sukcesie
                         startActivity(Intent(this, OknoGlowne::class.java))
                         finish()
                     }
                     .addOnFailureListener {
+                        // Obsługa błędu zapisu do bazy
                         tekstBleduImienia.text = "Błąd podczas zapisu danych"
                         tekstBleduImienia.visibility = View.VISIBLE
                     }
             } else {
+                // Obsługa przypadku braku identyfikatora użytkownika
                 tekstBleduImienia.text = "Nie można uzyskać użytkownika"
                 tekstBleduImienia.visibility = View.VISIBLE
             }

@@ -9,7 +9,12 @@ import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-
+/**
+ * Aktywność służąca do potwierdzenia wylogowania użytkownika.
+ *
+ * Wyświetla imię aktualnie zalogowanego użytkownika
+ * i umożliwia potwierdzenie lub anulowanie wylogowania.
+ */
 class OknoWyloguj : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
@@ -17,6 +22,12 @@ class OknoWyloguj : AppCompatActivity() {
     private lateinit var przyciskTak: Button
     private lateinit var przyciskNie: Button
 
+    /**
+     * Metoda wywoływana przy tworzeniu aktywności.
+     *
+     * Inicjalizuje komponenty interfejsu, pobiera imię użytkownika
+     * z bazy danych oraz obsługuje kliknięcia przycisków „Tak” i „Nie”.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.okno_wyloguj)

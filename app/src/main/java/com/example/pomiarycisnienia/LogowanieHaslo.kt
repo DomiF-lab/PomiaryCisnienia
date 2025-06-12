@@ -11,6 +11,10 @@ import androidx.core.widget.addTextChangedListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 
+/**
+ * Aktywność odpowiedzialna za logowanie użytkownika za pomocą hasła.
+ * W przypadku nieistniejącego konta podejmowana jest próba rejestracji.
+ */
 class LogowanieHaslo : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
@@ -20,6 +24,10 @@ class LogowanieHaslo : AppCompatActivity() {
 
     private lateinit var mail: String
 
+    /**
+     * Metoda uruchamiana przy tworzeniu aktywności.
+     * Inicjalizuje komponenty, konfiguruje zachowanie interfejsu oraz obsługę logowania.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.logowanie_haslo)

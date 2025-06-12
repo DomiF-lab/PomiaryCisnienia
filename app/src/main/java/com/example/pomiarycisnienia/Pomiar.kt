@@ -14,6 +14,16 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * Aktywność odpowiedzialna za dodawanie, edytowanie oraz przeglądanie pomiarów ciśnienia.
+ *
+ * Umożliwia:
+ * - wprowadzanie danych pomiarowych (SYS, DIA, puls),
+ * - określenie samopoczucia i ewentualnych dolegliwości,
+ * - ustawienie daty i godziny pomiaru,
+ * - zapis lub aktualizację pomiaru w bazie danych Firestore,
+ * - usunięcie istniejącego pomiaru.
+ */
 class Pomiar : AppCompatActivity() {
 
     // Inicjalizacja obiektów Firebase
@@ -39,6 +49,12 @@ class Pomiar : AppCompatActivity() {
     private var dokumentId: String? = null
     private var trybEdycji = false
 
+    /**
+     * Metoda wywoływana przy tworzeniu aktywności.
+     *
+     * Inicjalizuje komponenty interfejsu, rozpoznaje tryb działania (dodawanie / przegląd / edycja),
+     * pobiera dane użytkownika oraz konfiguruje odpowiednie zachowania pól formularza.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pomiar)
@@ -229,7 +245,10 @@ class Pomiar : AppCompatActivity() {
         }
     }
 
-    // Wyświetlenie okna dialogowego wyboru dolegliwości
+    /**
+     * Wyświetla okno dialogowe z możliwością wielokrotnego wyboru dolegliwości
+     * w przypadku samopoczucia oznaczonego jako "złe".
+     */
     private fun pokazWielokrotnyWyborDolegliwosci() {
         val dolegliwosciArray = arrayOf("Ból głowy", "Zawroty", "Zmęczenie", "Kołatanie serca", "Mdłości")
         val wybrane = BooleanArray(dolegliwosciArray.size)
@@ -248,7 +267,11 @@ class Pomiar : AppCompatActivity() {
             .show()
     }
 
-    // Ustawienie stanu edytowalności pól formularza
+    /**
+     * Ustawia możliwość edytowania poszczególnych pól formularza.
+     *
+     * @param wlacz Określa, czy pola mają być aktywne (true) czy zablokowane (false)
+     */
     private fun ustawPolaEdycji(wlacz: Boolean) {
         poleSYS.isEnabled = wlacz
         poleDIA.isEnabled = wlacz
@@ -260,6 +283,11 @@ class Pomiar : AppCompatActivity() {
         przyciskZapisz.isEnabled = wlacz
     }
 
+    /**
+     * Ładuje dane istniejącego pomiaru z Firestore i wypełnia nimi formularz.
+     *
+     * Wykorzystywane w trybie podglądu szczegółów pomiaru.
+     */
     private fun zaladujDanePomiaru() {
         if (dokumentId == null) return
 

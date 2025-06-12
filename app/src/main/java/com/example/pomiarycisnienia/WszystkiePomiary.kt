@@ -16,6 +16,15 @@ import android.graphics.Color
 import android.widget.Button
 import com.google.firebase.auth.FirebaseAuth
 
+/**
+ * Aktywność wyświetlająca listę wszystkich zapisanych pomiarów użytkownika.
+ *
+ * Umożliwia:
+ * - przeglądanie pełnej historii pomiarów ciśnienia,
+ * - dodanie nowego pomiaru,
+ * - otwarcie szczegółów wybranego pomiaru,
+ * - powrót do ekranu głównego.
+ */
 class WszystkiePomiary : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
@@ -23,6 +32,12 @@ class WszystkiePomiary : AppCompatActivity() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var nowyPomiar: TextView
 
+    /**
+     * Metoda wywoływana przy tworzeniu aktywności.
+     *
+     * Inicjalizuje komponenty interfejsu, konfiguruje RecyclerView oraz
+     * ustawia obsługę przycisków: dodawania pomiaru i powrotu do ekranu głównego.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.wszystkie_pomiary)
@@ -55,13 +70,21 @@ class WszystkiePomiary : AppCompatActivity() {
 
     }
 
+    /**
+     * Metoda wywoływana po wznowieniu aktywności.
+     *
+     * Odpowiada za wczytanie najnowszej listy pomiarów użytkownika z Firestore.
+     */
     override fun onResume() {
         super.onResume()
         // Po powrocie do aktywności wczytywana jest aktualna lista pomiarów
         wczytajPomiary()
     }
 
-    // Wczytywanie pomiarów z Firestore i przekazanie ich do adaptera
+    /**
+     * Wczytuje pomiary aktualnie zalogowanego użytkownika z bazy Firestore
+     * i przekazuje je do adaptera listy.
+     */
     private fun wczytajPomiary() {
 
         val email = FirebaseAuth.getInstance().currentUser?.email ?: return
@@ -83,11 +106,17 @@ class WszystkiePomiary : AppCompatActivity() {
             }
     }
 
-    // Adapter do wyświetlania listy pomiarów w RecyclerView
+    /**
+     * Adapter do wyświetlania listy pomiarów w komponencie RecyclerView.
+     *
+     * @property lista Lista obiektów reprezentujących pomiary
+     */
     inner class PomiarAdapter(private var lista: List<PomiarModel>) :
         RecyclerView.Adapter<PomiarAdapter.PomiarViewHolder>() {
 
-        // Klasa ViewHolder dla elementu listy
+        /**
+         * ViewHolder przechowujący widoki pojedynczego elementu listy pomiarów.
+         */
         inner class PomiarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val dataPomiaru: TextView = itemView.findViewById(R.id.dataPomiaru)
             val wartoscCisnienia: TextView = itemView.findViewById(R.id.wartoscCisnienia)
@@ -96,14 +125,21 @@ class WszystkiePomiary : AppCompatActivity() {
             val etykietaOceny: TextView = itemView.findViewById(R.id.etykietaOceny)
         }
 
-        // Tworzenie nowego ViewHoldera
+        /**
+         * Tworzy i zwraca nowy obiekt ViewHolder dla elementu listy.
+         */
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PomiarViewHolder {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.pojedynczy_kafelek, parent, false)
             return PomiarViewHolder(view)
         }
 
-        // Przypisywanie danych do elementów ViewHoldera
+        /**
+         * Przypisuje dane do widoków ViewHoldera dla konkretnej pozycji na liście.
+         *
+         * @param holder Obiekt ViewHoldera
+         * @param position Indeks elementu w liście
+         */
         override fun onBindViewHolder(holder: PomiarViewHolder, position: Int) {
             val pomiar = lista[position]
             holder.dataPomiaru.text = pomiar.data
@@ -130,10 +166,16 @@ class WszystkiePomiary : AppCompatActivity() {
             }
         }
 
-        // Zwracanie liczby elementów w liście
+        /**
+         * Zwraca liczbę elementów w liście pomiarów.
+         */
         override fun getItemCount(): Int = lista.size
 
-        // Aktualizacja danych w adapterze
+        /**
+         * Aktualizuje zawartość listy pomiarów i odświeża widok.
+         *
+         * @param nowaLista Nowa lista pomiarów do wyświetlenia
+         */
         fun aktualizujListe(nowaLista: List<PomiarModel>) {
             lista = nowaLista
             notifyDataSetChanged()
