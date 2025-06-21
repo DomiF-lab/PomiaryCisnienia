@@ -90,6 +90,7 @@ class WszystkiePomiary : AppCompatActivity() {
         val email = FirebaseAuth.getInstance().currentUser?.email ?: return
         firestore.collection("pomiary")
             .whereEqualTo("mail", email)
+            .orderBy("dataPomiaruTimestamp", com.google.firebase.firestore.Query.Direction.ASCENDING) // Najstarsze -> najnowsze!
             .get()
 
             .addOnSuccessListener { result ->

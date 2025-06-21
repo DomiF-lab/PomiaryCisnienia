@@ -20,6 +20,7 @@ import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.google.firebase.firestore.Query
 import java.util.*
 
 /**
@@ -115,12 +116,15 @@ class OknoGlowne : AppCompatActivity() {
         val prefs = getSharedPreferences(PREFS, MODE_PRIVATE)
         val czyPowiadomienia = prefs.getBoolean("powiadomienia_wlaczone", false)
         switchPowiadomien.isChecked = czyPowiadomienia
-        ustawStanTekstuHarmonogram(czyPowiadomienia)
+        ustawStanTekstuHarmonogramu(czyPowiadomienia)
+        ustawKolorySwitchaPowiadomien()
+
 
         // Obsługa zmiany stanu switcha
         switchPowiadomien.setOnCheckedChangeListener { _, isChecked ->
             prefs.edit().putBoolean("powiadomienia_wlaczone", isChecked).apply()
-            ustawStanTekstuHarmonogram(isChecked)
+            ustawStanTekstuHarmonogramu(isChecked)
+            ustawKolorySwitchaPowiadomien()
             if (isChecked) {
                 val lastHour = prefs.getInt(GODZINA, Calendar.getInstance().get(Calendar.HOUR_OF_DAY))
                 val lastMinute = prefs.getInt(MINUTA, Calendar.getInstance().get(Calendar.MINUTE))
@@ -143,13 +147,28 @@ class OknoGlowne : AppCompatActivity() {
     }
 
     /**
-     * Ustawia styl tekstu "Ustaw harmonogram" w zależności od włączonego switcha.
+     * Ustawia tekst, kolor i aktywność pola harmonogramu w zależności od stanu powiadomień.
+     *
+     * Gdy powiadomienia są włączone, tekst zmienia się na "Edytuj Harmonogram" wraz z ustawioną godziną pod spodem.
+     * Gdy powiadomienia są wyłączone, tekst to "Ustaw Harmonogram", pole jest nieaktywne i przyjmuje szary kolor.
+     *
+     * @param wlaczony Określa, czy powiadomienia są włączone (true) czy wyłączone (false).
      */
-    private fun ustawStanTekstuHarmonogram(wlaczony: Boolean) {
+    private fun ustawStanTekstuHarmonogramu(wlaczony: Boolean) {
         tekstUstawHarmonogram.isEnabled = wlaczony
         tekstUstawHarmonogram.setTextColor(
             if (wlaczony) Color.parseColor("#E30000") else Color.parseColor("#AAAAAA")
         )
+        val prefs = getSharedPreferences(PREFS, MODE_PRIVATE)
+        val godzina = prefs.getInt(GODZINA, -1)
+        val minuta = prefs.getInt(MINUTA, -1)
+
+        if (wlaczony && godzina != -1 && minuta != -1) {
+            val godzinaMinuta = String.format("%02d:%02d", godzina, minuta)
+            tekstUstawHarmonogram.text = "Edytuj Harmonogram:\ncodziennie o $godzinaMinuta"
+        } else {
+            tekstUstawHarmonogram.text = "Ustaw Harmonogram"
+        }
     }
 
     /**
@@ -165,6 +184,23 @@ class OknoGlowne : AppCompatActivity() {
         picker.setTitle("Wybierz godzinę przypomnienia")
         picker.show()
     }
+
+    /**
+     * Ustawia kolory thumb (przycisku) switcha powiadomień w zależności od jego stanu.
+     * Czerwony thumb – włączony, szary – wyłączony.
+     */
+    private fun ustawKolorySwitchaPowiadomien() {
+        val thumbStates = arrayOf(
+            intArrayOf(android.R.attr.state_checked),
+            intArrayOf(-android.R.attr.state_checked)
+        )
+        val thumbColors = intArrayOf(
+            Color.parseColor("#E30000"), // Czerwony, gdy włączony
+            Color.LTGRAY                  // Szary, gdy wyłączony
+        )
+        switchPowiadomien.thumbTintList = ColorStateList(thumbStates, thumbColors)
+    }
+
 
     /**
      * Ustawia codzienne przypomnienie o wskazanej godzinie oraz zapisuje ją do preferencji.
@@ -205,6 +241,7 @@ class OknoGlowne : AppCompatActivity() {
         )
 
         Toast.makeText(this, "Przypomnienie ustawione na $godzina:${"%02d".format(minuta)}", Toast.LENGTH_SHORT).show()
+        ustawStanTekstuHarmonogramu(true)
     }
 
     /**
@@ -228,8 +265,8 @@ class OknoGlowne : AppCompatActivity() {
         val email = FirebaseAuth.getInstance().currentUser?.email ?: return
         firestore.collection("pomiary")
             .whereEqualTo("mail", email)
-            .orderBy("timestamp")
-            .limitToLast(1)
+            .orderBy("dataPomiaruTimestamp", Query.Direction.DESCENDING)
+            .limit(1)
             .get()
             .addOnSuccessListener { result ->
                 val lista = result.documents.mapNotNull { doc ->
@@ -240,7 +277,7 @@ class OknoGlowne : AppCompatActivity() {
                     val puls = doc.getString("puls") ?: ""
                     val samopoczucie = doc.getString("samopoczucie") ?: ""
                     PomiarModel(id, data, "$sys/$dia", puls, samopoczucie)
-                }.reversed()
+                }
                 adapter.aktualizujListe(lista)
             }
             .addOnFailureListener {
@@ -316,30 +353,33 @@ class OknoGlowne : AppCompatActivity() {
         val email = FirebaseAuth.getInstance().currentUser?.email ?: return
         firestore.collection("pomiary")
             .whereEqualTo("mail", email)
-            .orderBy("timestamp")
-            .limitToLast(10)
+            .orderBy("dataPomiaruTimestamp", Query.Direction.ASCENDING)
+            .limit(10)
             .get()
             .addOnSuccessListener { result ->
                 val sysList = mutableListOf<Entry>()
                 val diaList = mutableListOf<Entry>()
+                val pulsList = mutableListOf<Entry>()
                 val labels = mutableListOf<String>()
 
                 val docs = result.documents
                 docs.forEachIndexed { idx, doc ->
                     val sys = doc.getString("sys")?.toFloatOrNull()
                     val dia = doc.getString("dia")?.toFloatOrNull()
+                    val puls = doc.getString("puls")?.toFloatOrNull()
                     val data = doc.getString("dataPomiaru") ?: ""
 
-                    if (sys != null && dia != null) {
+                    if (sys != null && dia != null && puls != null) {
                         sysList.add(Entry(idx.toFloat(), sys))
                         diaList.add(Entry(idx.toFloat(), dia))
-                        // Krótsza data do opisu X
+                        pulsList.add(Entry(idx.toFloat(), puls))
+                        // Skrócenie daty na potrzeby opisu
                         labels.add(
                             if (data.length > 5) data.substring(0, 5) else data
                         )
                     }
                 }
-                pokazWykres(sysList, diaList, labels)
+                pokazWykres(sysList, diaList, pulsList, labels)
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Błąd ładowania wykresu", Toast.LENGTH_SHORT).show()
@@ -351,25 +391,35 @@ class OknoGlowne : AppCompatActivity() {
      *
      * @param sysList Lista punktów SYS
      * @param diaList Lista punktów DIA
+     * @param pulsList Lista punktów Pulsu
      * @param labels Lista etykiet X (dat)
      */
-    private fun pokazWykres(sysList: List<Entry>, diaList: List<Entry>, labels: List<String>) {
-        val sysSet = LineDataSet(sysList, "SYS").apply {
+    private fun pokazWykres(sysList: List<Entry>, diaList: List<Entry>, pulsList: List<Entry>, labels: List<String>) {
+        val sysSet = LineDataSet(sysList, "Skurczowe (SYS)").apply {
             lineWidth = 2.5f
             circleRadius = 4f
             setDrawValues(false)
-            color = Color.RED
-            setCircleColor(Color.RED)
+            color = Color.parseColor("#E30000")
+            setCircleColor(Color.parseColor("#E30000"))
         }
-        val diaSet = LineDataSet(diaList, "DIA").apply {
+        val diaSet = LineDataSet(diaList, "Rozkurczowe (DIA)").apply {
             lineWidth = 2.5f
             circleRadius = 4f
             setDrawValues(false)
-            color = Color.BLUE
-            setCircleColor(Color.BLUE)
+            color = Color.parseColor("#0004E3")
+            setCircleColor(Color.parseColor("#0004E3"))
         }
-        val lineData = LineData(sysSet, diaSet)
-        wykresCisnienia.data = lineData
+
+        val pulsSet = LineDataSet(pulsList, "Puls").apply {
+            lineWidth = 2.5f
+            circleRadius = 4f
+            setDrawValues(false)
+            color = Color.parseColor("#00F048")
+            setCircleColor(Color.parseColor("#00F048"))
+        }
+
+        val liniaData = LineData(sysSet, diaSet, pulsSet)
+        wykresCisnienia.data = liniaData
 
         // Formatowanie osi x (daty)
         wykresCisnienia.xAxis.valueFormatter = object : ValueFormatter() {
@@ -382,9 +432,10 @@ class OknoGlowne : AppCompatActivity() {
         wykresCisnienia.xAxis.granularity = 1f
 
         // Pozostałe ustawienia wyglądu
+        wykresCisnienia.setExtraTopOffset(16f)
         wykresCisnienia.axisRight.isEnabled = false
         wykresCisnienia.description.isEnabled = false
-        wykresCisnienia.legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
+        wykresCisnienia.legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
         wykresCisnienia.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
         wykresCisnienia.setNoDataText("Brak wystarczającej liczby pomiarów")
         wykresCisnienia.invalidate()

@@ -26,6 +26,7 @@ class ReminderBroadcast : BroadcastReceiver() {
      */
     override fun onReceive(context: Context, intent: Intent) {
         val powiadomienie = NotificationCompat.Builder(context, KANAL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Przypomnienie o pomiarze")
             .setContentText("Nie zapomnij dziś zmierzyć ciśnienia!")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

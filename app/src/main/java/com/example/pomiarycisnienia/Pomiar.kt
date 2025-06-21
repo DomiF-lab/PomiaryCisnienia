@@ -41,6 +41,9 @@ class Pomiar : AppCompatActivity() {
     private lateinit var inputDolegliwosci: MaterialAutoCompleteTextView
     private lateinit var poleDataPomiaru: MaterialAutoCompleteTextView
     private lateinit var przyciskZapisz: Button
+    private lateinit var tekstDolegliwosci: TextView
+    private lateinit var inputDolegliwosciLayout: View
+
 
     // Zmienne pomocnicze
     private var wybraneDolegliwosci = mutableSetOf<String>()
@@ -48,6 +51,7 @@ class Pomiar : AppCompatActivity() {
     private var emailUzytkownika: String = ""
     private var dokumentId: String? = null
     private var trybEdycji = false
+
 
     /**
      * Metoda wywoływana przy tworzeniu aktywności.
@@ -75,6 +79,15 @@ class Pomiar : AppCompatActivity() {
         inputDolegliwosci = findViewById(R.id.inputDolegliwosci)
         poleDataPomiaru = findViewById(R.id.poleDataPomiaru)
         przyciskZapisz = findViewById(R.id.przyciskZapisz)
+        tekstDolegliwosci = findViewById(R.id.tekstDolegliwosci)
+        inputDolegliwosciLayout = findViewById(R.id.inputDolegliwosciLayout)
+
+        // Ukrycie karty dolegliwosci
+        tekstDolegliwosci.visibility = View.GONE
+        inputDolegliwosciLayout.visibility = View.GONE
+
+        //Teskt przycisku Edytuj
+        tekstEdytuj.text = "Edytuj"
 
         // Pobranie dokumentId i trybu edycji
         val zrodlo = intent.getStringExtra("zrodlo")
@@ -106,9 +119,21 @@ class Pomiar : AppCompatActivity() {
 
         // Aktywacja trybu edycji
         tekstEdytuj.setOnClickListener {
-            tekstUsun.visibility = View.VISIBLE
-            ustawPolaEdycji(true)
-            trybEdycji = true
+            if (!trybEdycji) {
+                // Przechodzimy do trybu edycji
+                trybEdycji = true
+                tekstEdytuj.text = "Anuluj"
+                tekstUsun.visibility = View.VISIBLE
+                ustawPolaEdycji(true)
+            } else {
+                // Wracamy do trybu wyświetlania (bez zapisu!)
+                trybEdycji = false
+                tekstEdytuj.text = "Edytuj"
+                tekstUsun.visibility = View.INVISIBLE
+                ustawPolaEdycji(false)
+                // Załaduj ponownie dane z bazy (cofa zmiany na formularzu)
+                zaladujDanePomiaru()
+            }
         }
 
         // Usuwanie dokumentu z bazy danych po potwierdzeniu
@@ -141,9 +166,22 @@ class Pomiar : AppCompatActivity() {
                 { _, year, month, dayOfMonth ->
                     val timePicker = TimePickerDialog(this,
                         { _, hourOfDay, minute ->
-                            kalendarz.set(year, month, dayOfMonth, hourOfDay, minute)
-                            val format = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
-                            poleDataPomiaru.setText(format.format(kalendarz.time))
+                            // BLOKADA GODZINY Z PRZYSZŁOŚCI
+                            val wybranyCzas = Calendar.getInstance().apply {
+                                set(Calendar.YEAR, year)
+                                set(Calendar.MONTH, month)
+                                set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                                set(Calendar.HOUR_OF_DAY, hourOfDay)
+                                set(Calendar.MINUTE, minute)
+                                set(Calendar.SECOND, 0)
+                                set(Calendar.MILLISECOND, 0)
+                            }
+                            if (wybranyCzas.timeInMillis > System.currentTimeMillis()) {
+                                Toast.makeText(this@Pomiar, "Nie można wybrać godziny z przyszłości.", Toast.LENGTH_SHORT).show()
+                            } else {
+                                val format = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
+                                poleDataPomiaru.setText(format.format(wybranyCzas.time))
+                            }
                         },
                         kalendarz.get(Calendar.HOUR_OF_DAY),
                         kalendarz.get(Calendar.MINUTE),
@@ -155,6 +193,7 @@ class Pomiar : AppCompatActivity() {
                 kalendarz.get(Calendar.MONTH),
                 kalendarz.get(Calendar.DAY_OF_MONTH)
             )
+            datePicker.datePicker.maxDate = System.currentTimeMillis()
             datePicker.show()
         }
 
@@ -171,9 +210,13 @@ class Pomiar : AppCompatActivity() {
             if (!trybEdycji) return@setOnClickListener
             samopoczucie = "dobre"
             przyciskDobre.alpha = 1.0f
-            przyciskZle.alpha = 0.7f
+            przyciskZle.alpha = 0.45f
             inputDolegliwosci.setText("Brak")
             wybraneDolegliwosci.clear()
+
+            // Ukrycie pola dolegliwości
+            tekstDolegliwosci.visibility = View.GONE
+            inputDolegliwosciLayout.visibility = View.GONE
         }
 
         // Ustawienie samopoczucia jako złe
@@ -181,7 +224,12 @@ class Pomiar : AppCompatActivity() {
             if (!trybEdycji) return@setOnClickListener
             samopoczucie = "złe"
             przyciskZle.alpha = 1.0f
-            przyciskDobre.alpha = 0.7f
+            przyciskDobre.alpha = 0.45f
+
+            // Pokazanie pola dolegliwości
+            tekstDolegliwosci.visibility = View.VISIBLE
+            inputDolegliwosciLayout.visibility = View.VISIBLE
+            pokazWielokrotnyWyborDolegliwosci()
         }
 
         // Obsługa zapisu pomiaru do bazy danych
@@ -209,6 +257,16 @@ class Pomiar : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // Walidacja samopoczucia
+            if (samopoczucie.isBlank()) {
+                Toast.makeText(this, "Proszę wybrać samopoczucie", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val sdf = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
+            val dataPomiaruDate = sdf.parse(dataPomiaru)
+            val dataPomiaruTimestamp = com.google.firebase.Timestamp(dataPomiaruDate)
+
             val danePomiaru = hashMapOf(
                 "mail" to emailUzytkownika,
                 "sys" to cisnienieSYS.toString(),
@@ -217,7 +275,7 @@ class Pomiar : AppCompatActivity() {
                 "samopoczucie" to samopoczucie,
                 "dolegliwosci" to wybraneDolegliwosci.joinToString(", "),
                 "dataPomiaru" to dataPomiaru,
-                "timestamp" to com.google.firebase.Timestamp.now()
+                "dataPomiaruTimestamp" to dataPomiaruTimestamp
             )
 
             // Aktualizacja istniejącego dokumentu lub dodanie nowego
@@ -303,10 +361,19 @@ class Pomiar : AppCompatActivity() {
 
                 if (samopoczucie == "dobre") {
                     przyciskDobre.alpha = 1.0f
-                    przyciskZle.alpha = 0.7f
-                } else if (samopoczucie == "zle") {
+                    przyciskZle.alpha = 0.45f
+                    tekstDolegliwosci.visibility = View.GONE
+                    inputDolegliwosciLayout.visibility = View.GONE
+                } else if (samopoczucie == "złe") {
                     przyciskZle.alpha = 1.0f
-                    przyciskDobre.alpha = 0.7f
+                    przyciskDobre.alpha = 0.45f
+                    tekstDolegliwosci.visibility = View.VISIBLE
+                    inputDolegliwosciLayout.visibility = View.VISIBLE
+                } else {
+                    przyciskDobre.alpha = 0.45f
+                    przyciskZle.alpha = 0.45f
+                    tekstDolegliwosci.visibility = View.GONE
+                    inputDolegliwosciLayout.visibility = View.GONE
                 }
 
                 doc.getString("dolegliwosci")?.split(",")?.map { it.trim() }?.let {
