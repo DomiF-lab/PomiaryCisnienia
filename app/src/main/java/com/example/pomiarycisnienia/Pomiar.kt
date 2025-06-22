@@ -46,11 +46,12 @@ class Pomiar : AppCompatActivity() {
 
 
     // Zmienne pomocnicze
-    private var wybraneDolegliwosci = mutableSetOf<String>()
     private var samopoczucie: String = ""
     private var emailUzytkownika: String = ""
     private var dokumentId: String? = null
     private var trybEdycji = false
+    private var dolegliwosciArray = arrayOf("Ból głowy", "Zawroty", "Zmęczenie", "Kołatanie serca", "Mdłości")
+    private var wybraneDolegliwosci = mutableSetOf<String>()
 
 
     /**
@@ -304,25 +305,53 @@ class Pomiar : AppCompatActivity() {
     }
 
     /**
-     * Wyświetla okno dialogowe z możliwością wielokrotnego wyboru dolegliwości
+     * Wyświetla okno dialogowe z możliwością wielokrotnego wyboru dolegliwości i dodania własnych
      * w przypadku samopoczucia oznaczonego jako "złe".
      */
     private fun pokazWielokrotnyWyborDolegliwosci() {
-        val dolegliwosciArray = arrayOf("Ból głowy", "Zawroty", "Zmęczenie", "Kołatanie serca", "Mdłości")
-        val wybrane = BooleanArray(dolegliwosciArray.size)
+        val listaZDodaj = dolegliwosciArray + "Dodaj dolegliwość"
+        val wybrane = BooleanArray(listaZDodaj.size) { pozycja ->
+            pozycja < dolegliwosciArray.size && wybraneDolegliwosci.contains(dolegliwosciArray[pozycja])
+        }
 
-        AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this)
             .setTitle("Wybierz dolegliwości")
-            .setMultiChoiceItems(dolegliwosciArray, wybrane) { _, which, isChecked ->
+            .setMultiChoiceItems(listaZDodaj, wybrane) { dialog, which, isChecked ->
+                if (which == listaZDodaj.lastIndex) {
+                    val poleTekstowe = EditText(this)
+                    AlertDialog.Builder(this)
+                        .setTitle("Dodaj nową dolegliwość")
+                        .setView(poleTekstowe)
+                        .setPositiveButton("Dodaj") { _, _ ->
+                            val nowa = poleTekstowe.text.toString().trim()
+                            if (nowa.isNotEmpty() && !dolegliwosciArray.contains(nowa)) {
+                                dolegliwosciArray = dolegliwosciArray + nowa
+                                wybraneDolegliwosci.add(nowa)
+                                inputDolegliwosci.setText(wybraneDolegliwosci.joinToString(", "))
+                                // Po dodaniu, ponownie otwiera okno dolegliwosci
+                                // Zamyka obecne okno
+                                (dialog as AlertDialog).dismiss()
+                                // Otwiera zaaktualizowane okno
+                                pokazWielokrotnyWyborDolegliwosci()
+                            }
+                        }
+                        .setNegativeButton("Anuluj", null)
+                        .show()
+                    // Odznacza dodaj dolegliwość
+                    (dialog as AlertDialog).listView.setItemChecked(which, false)
+                    return@setMultiChoiceItems
+                }
+                val wybrana = dolegliwosciArray[which]
                 if (isChecked) {
-                    wybraneDolegliwosci.add(dolegliwosciArray[which])
+                    wybraneDolegliwosci.add(wybrana)
                 } else {
-                    wybraneDolegliwosci.remove(dolegliwosciArray[which])
+                    wybraneDolegliwosci.remove(wybrana)
                 }
                 inputDolegliwosci.setText(wybraneDolegliwosci.joinToString(", "))
             }
             .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-            .show()
+
+        builder.show()
     }
 
     /**
@@ -376,9 +405,20 @@ class Pomiar : AppCompatActivity() {
                     inputDolegliwosciLayout.visibility = View.GONE
                 }
 
-                doc.getString("dolegliwosci")?.split(",")?.map { it.trim() }?.let {
-                    wybraneDolegliwosci.addAll(it)
+                wybraneDolegliwosci.clear()
+                doc.getString("dolegliwosci")?.split(",")?.map { it.trim() }?.let { listaZBazy ->
+                    // Dodaje do wybraneDolegliwosci
+                    wybraneDolegliwosci.addAll(listaZBazy.filter { it.isNotEmpty() && it != "Brak" })
+
+                    // Dodaje brakujące dolegliwości do tablicy dolegliwosciArray
+                    val noweDolegliwosci = listaZBazy.filter {
+                        it.isNotEmpty() && it != "Brak" && !dolegliwosciArray.contains(it)
+                    }
+                    if (noweDolegliwosci.isNotEmpty()) {
+                        dolegliwosciArray = dolegliwosciArray + noweDolegliwosci
+                    }
                 }
+
             }
     }
 }

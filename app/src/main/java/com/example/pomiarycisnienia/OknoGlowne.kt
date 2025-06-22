@@ -98,7 +98,20 @@ class OknoGlowne : AppCompatActivity() {
                     val imie = document.getString("imie")
                     if (!imie.isNullOrBlank()) {
                         poleImie.text = "Zalogowano jako $imie"
+                    } else {
+                        // Brak imienia - przenieś na ekran wpisywania imienia
+                        val intent = Intent(this, LogowanieImie::class.java)
+                        intent.putExtra("email", auth.currentUser?.email)
+                        startActivity(intent)
+                        finish()
                     }
+                }
+                .addOnFailureListener {
+                    // Dokument (imię) nie istnieje - przenosi na ekran wpisywania imienia
+                    val intent = Intent(this, LogowanieImie::class.java)
+                    intent.putExtra("email", auth.currentUser?.email)
+                    startActivity(intent)
+                    finish()
                 }
         }
 
@@ -362,23 +375,38 @@ class OknoGlowne : AppCompatActivity() {
                 val pulsList = mutableListOf<Entry>()
                 val labels = mutableListOf<String>()
 
-                val docs = result.documents
-                docs.forEachIndexed { idx, doc ->
+                // grupowanie po dniu
+                val mapByDate = LinkedHashMap<String, MutableList<Triple<Float, Float, Float>>>()
+
+                for (doc in result.documents) {
                     val sys = doc.getString("sys")?.toFloatOrNull()
                     val dia = doc.getString("dia")?.toFloatOrNull()
                     val puls = doc.getString("puls")?.toFloatOrNull()
                     val data = doc.getString("dataPomiaru") ?: ""
 
+                    // Skrócenie daty
+                    val day = if (data.length > 5) data.substring(0, 5) else data
+
                     if (sys != null && dia != null && puls != null) {
-                        sysList.add(Entry(idx.toFloat(), sys))
-                        diaList.add(Entry(idx.toFloat(), dia))
-                        pulsList.add(Entry(idx.toFloat(), puls))
-                        // Skrócenie daty na potrzeby opisu
-                        labels.add(
-                            if (data.length > 5) data.substring(0, 5) else data
-                        )
+                        if (!mapByDate.containsKey(day)) {
+                            mapByDate[day] = mutableListOf()
+                        }
+                        mapByDate[day]?.add(Triple(sys, dia, puls))
                     }
                 }
+
+                // Budowanie paczki wyników
+                var osX = 0f
+                for ((date, pomiary) in mapByDate) {
+                    for (pomiar in pomiary) {
+                        sysList.add(Entry(osX, pomiar.first))
+                        diaList.add(Entry(osX, pomiar.second))
+                        pulsList.add(Entry(osX, pomiar.third))
+                    }
+                    labels.add(date)
+                    osX += 1f
+                }
+
                 pokazWykres(sysList, diaList, pulsList, labels)
             }
             .addOnFailureListener {
@@ -396,27 +424,49 @@ class OknoGlowne : AppCompatActivity() {
      */
     private fun pokazWykres(sysList: List<Entry>, diaList: List<Entry>, pulsList: List<Entry>, labels: List<String>) {
         val sysSet = LineDataSet(sysList, "Skurczowe (SYS)").apply {
-            lineWidth = 2.5f
+            lineWidth = 0.001f
             circleRadius = 4f
-            setDrawValues(false)
             color = Color.parseColor("#E30000")
             setCircleColor(Color.parseColor("#E30000"))
+            setDrawCircles(true)
+            setDrawValues(false)
+            setDrawCircleHole(false)
+            setDrawIcons(false)
+            setDrawHighlightIndicators(false)
+            setDrawHorizontalHighlightIndicator(false)
+            setDrawVerticalHighlightIndicator(false)
+            setDrawFilled(false)
         }
         val diaSet = LineDataSet(diaList, "Rozkurczowe (DIA)").apply {
-            lineWidth = 2.5f
+            lineWidth = 0.001f
             circleRadius = 4f
-            setDrawValues(false)
             color = Color.parseColor("#0004E3")
             setCircleColor(Color.parseColor("#0004E3"))
+            setDrawCircles(true)
+            setDrawValues(false)
+            setDrawCircleHole(false)
+            setDrawIcons(false)
+            setDrawHighlightIndicators(false)
+            setDrawHorizontalHighlightIndicator(false)
+            setDrawVerticalHighlightIndicator(false)
+            setDrawFilled(false)
         }
 
         val pulsSet = LineDataSet(pulsList, "Puls").apply {
-            lineWidth = 2.5f
+            lineWidth = 0.001f
             circleRadius = 4f
-            setDrawValues(false)
             color = Color.parseColor("#00F048")
             setCircleColor(Color.parseColor("#00F048"))
+            setDrawCircles(true)
+            setDrawValues(false)
+            setDrawCircleHole(false)
+            setDrawIcons(false)
+            setDrawHighlightIndicators(false)
+            setDrawHorizontalHighlightIndicator(false)
+            setDrawVerticalHighlightIndicator(false)
+            setDrawFilled(false)
         }
+
 
         val liniaData = LineData(sysSet, diaSet, pulsSet)
         wykresCisnienia.data = liniaData

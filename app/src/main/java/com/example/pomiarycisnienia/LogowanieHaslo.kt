@@ -21,6 +21,8 @@ class LogowanieHaslo : AppCompatActivity() {
     private lateinit var poleHaslo: EditText
     private lateinit var tekstBledu2: TextView
     private lateinit var przyciskKontynuuj: Button
+    private lateinit var naglowekLogowania2: TextView
+    private lateinit var tekstLogowania2: TextView
 
     private lateinit var mail: String
 
@@ -37,19 +39,19 @@ class LogowanieHaslo : AppCompatActivity() {
         poleHaslo = findViewById(R.id.poleHaslo)
         tekstBledu2 = findViewById(R.id.tekstBledu2)
         przyciskKontynuuj = findViewById(R.id.przyciskLogowanie2)
+        naglowekLogowania2 = findViewById(R.id.naglowekLogowania2)
+        tekstLogowania2 = findViewById(R.id.tekstLogowania2)
 
         // Pobranie e-maila z poprzedniej aktywności
         mail = intent.getStringExtra("email")?.trim()?.lowercase().orEmpty()
 
         // Ukrycie tekstu błędu i dezaktywacja przycisku na start
         tekstBledu2.visibility = View.INVISIBLE
-        przyciskKontynuuj.isEnabled = false
         przyciskKontynuuj.alpha = 0.5f
 
         // Walidacja hasła: przycisk aktywny, jeśli hasło ma co najmniej 8 znaków
         poleHaslo.addTextChangedListener {
             val valid = (it?.length ?: 0) >= 8
-            przyciskKontynuuj.isEnabled = valid
             przyciskKontynuuj.alpha = if (valid) 1f else 0.5f
         }
 
@@ -83,7 +85,7 @@ class LogowanieHaslo : AppCompatActivity() {
 
                                     when (kodBledu) {
                                         "ERROR_EMAIL_ALREADY_IN_USE" -> {
-                                            tekstBledu2.text = "Nieprawidłowe hasło lub konto już istnieje"
+                                            tekstBledu2.text = "Nieprawidłowe hasło."
                                         }
                                         else -> {
                                             tekstBledu2.text = "Rejestracja nie powiodła się"

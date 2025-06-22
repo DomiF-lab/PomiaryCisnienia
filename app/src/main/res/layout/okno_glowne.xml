@@ -65,6 +65,7 @@
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/wykresCisnienia"
         android:layout_width="0dp"
+        android:maxWidth="600dp"
         android:layout_height="140dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +90,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
+        android:maxWidth="600dp"
         android:layout_height="160dp"
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"

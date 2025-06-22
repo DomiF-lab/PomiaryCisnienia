@@ -35,14 +35,12 @@ class LogowanieMail : AppCompatActivity() {
 
         // Ukrycie komunikatu o błędzie i dezaktywacja przycisku początkowo
         tekstBledu.visibility = View.INVISIBLE
-        przyciskLogowanie.isEnabled = false
         przyciskLogowanie.alpha = 0.5f
 
         // Włączanie przycisku jeśli email wygląda prawidłowo
         poleMail.addTextChangedListener {
             val email = it.toString().trim()
             val poprawny = Patterns.EMAIL_ADDRESS.matcher(email).matches()
-            przyciskLogowanie.isEnabled = poprawny
             przyciskLogowanie.alpha = if (poprawny) 1f else 0.5f
         }
 
