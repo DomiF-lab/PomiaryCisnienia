@@ -13,8 +13,25 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
+/**
+ * ReminderBroadcast – Klasa odbierająca zdarzenia systemowe (BroadcastReceiver)
+ * i wyświetlająca powiadomienie przypominające użytkownikowi o wykonaniu pomiaru ciśnienia.
+ *
+ * Funkcje:
+ * - Tworzy kanał powiadomień (dla Androida 8.0 i nowszych).
+ * - Buduje i wyświetla powiadomienie z możliwością przejścia do głównej aktywności aplikacji.
+ * - Sprawdza, czy aplikacja posiada wymagane uprawnienia do wyświetlania powiadomień.
+ *
+ */
 class ReminderBroadcast : BroadcastReceiver() {
 
+    /**
+     * Metoda wywoływana po odebraniu zdarzenia.
+     *
+     * Tworzy kanał powiadomień, buduje powiadomienie
+     * przypominające o pomiarze ciśnienia i wyświetla je użytkownikowi,
+     * jeśli przyznane zostały odpowiednie uprawnienia.
+     */
     override fun onReceive(context: Context, intent: Intent) {
         // Utworzenie kanału powiadomień (dla Androida 8.0+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
